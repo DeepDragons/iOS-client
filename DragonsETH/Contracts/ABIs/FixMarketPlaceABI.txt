@@ -1,0 +1,578 @@
+[
+{
+"constant": false,
+"inputs": [
+{
+"name": "_dragonOwner",
+"type": "address"
+},
+{
+"name": "_dragonID",
+"type": "uint256"
+},
+{
+"name": "_dragonPrice",
+"type": "uint256"
+},
+{
+"name": "_endBlockNumber",
+"type": "uint256"
+}
+],
+"name": "add2MarketPlace",
+"outputs": [
+{
+"name": "",
+"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "addr",
+"type": "address"
+},
+{
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "adminAddRole",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "addr",
+"type": "address"
+},
+{
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "adminRemoveRole",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_dragonID",
+"type": "uint256"
+}
+],
+"name": "buyDragon",
+"outputs": [],
+"payable": true,
+"stateMutability": "payable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_newAddress",
+"type": "address"
+}
+],
+"name": "changeAddressMainContract",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_maxSellTime",
+"type": "uint256"
+}
+],
+"name": "changeMaxSellTime",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_minSellTime",
+"type": "uint256"
+}
+],
+"name": "changeMinSellTime",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_ownersPercent",
+"type": "uint256"
+}
+],
+"name": "changeOwnersPercent",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_wallet",
+"type": "address"
+}
+],
+"name": "changeWallet",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_start",
+"type": "uint256"
+},
+{
+"name": "_count",
+"type": "uint256"
+}
+],
+"name": "clearStuxDragon",
+"outputs": [
+{
+"name": "_deleted",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+"name": "_dragonID",
+"type": "uint256"
+}
+],
+"name": "delFromFixMarketPlace",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "destroy",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "pause",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "unpause",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [],
+"name": "withdrawAllEther",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"inputs": [
+{
+"name": "_wallet",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "constructor"
+},
+{
+"anonymous": false,
+"inputs": [],
+"name": "Pause",
+"type": "event"
+},
+{
+"anonymous": false,
+"inputs": [],
+"name": "Unpause",
+"type": "event"
+},
+{
+"anonymous": false,
+"inputs": [
+{
+"indexed": false,
+"name": "addr",
+"type": "address"
+},
+{
+"indexed": false,
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "RoleAdded",
+"type": "event"
+},
+{
+"anonymous": false,
+"inputs": [
+{
+"indexed": false,
+"name": "addr",
+"type": "address"
+},
+{
+"indexed": false,
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "RoleRemoved",
+"type": "event"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "addr",
+"type": "address"
+},
+{
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "checkRole",
+"outputs": [],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "dragonPrices",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "dragonsEndBlock",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "dragonsList",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "dragonsListIndex",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"name": "dragonsOwner",
+"outputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "getAllDragonsSale",
+"outputs": [
+{
+"name": "",
+"type": "uint256[]"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "getDragonsToSale",
+"outputs": [
+{
+"name": "",
+"type": "uint256[]"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "_dragonIDs",
+"type": "uint256[]"
+}
+],
+"name": "getFewDragons",
+"outputs": [
+{
+"name": "",
+"type": "uint256[]"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+"name": "addr",
+"type": "address"
+},
+{
+"name": "roleName",
+"type": "string"
+}
+],
+"name": "hasRole",
+"outputs": [
+{
+"name": "",
+"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "mainContract",
+"outputs": [
+{
+"name": "",
+"type": "address"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "maxSellTime",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "minSellTime",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "ownersPercent",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "paused",
+"outputs": [
+{
+"name": "",
+"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "ROLE_ADMIN",
+"outputs": [
+{
+"name": "",
+"type": "string"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "ROLE_PAUSE_ADMIN",
+"outputs": [
+{
+"name": "",
+"type": "string"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "totalDragonsToSale",
+"outputs": [
+{
+"name": "",
+"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+}
+]
