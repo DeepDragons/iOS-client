@@ -60,9 +60,8 @@ class MarketPlaceCollectionViewController: UICollectionViewController {
                     marketPlaceABI = try String(contentsOfFile: path)
                 }
                 let marketplaceAddress = ContractAddress.fixMarketPlace
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 let contract = web3.contract(marketPlaceABI, at: marketplaceAddress, abiVersion: 2)!
                 let dragonIds = try contract.method("getDragonsToSale", parameters: [])?.call(transactionOptions: nil)

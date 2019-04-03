@@ -47,13 +47,13 @@ class MyDragonViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(dragon.imageURL)
         imageView.kf.setImage(with: dragon.imageURL, placeholder: UIImage(named: "eggPlaceholder")!)
         dragonNameLabel.text = "\(dragon.name ?? "Dragon #" + dragon.id)"
         
         chartView.xAxis.drawLabelsEnabled = false
         chartView.yAxis.drawLabelsEnabled = false
         chartView.chartDescription?.text = ""
+        getDragonInfo()
     }
     
     func updateUI() {
@@ -147,9 +147,8 @@ class MyDragonViewController: UIViewController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var dragonETHContractABI: String!
                 if let path = Bundle.main.path(forResource: "DragonETHContractABI", ofType: "txt") {
@@ -233,9 +232,8 @@ class MyDragonViewController: UIViewController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var dragonETHContractABI: String!
                 if let path = Bundle.main.path(forResource: "DragonETHContractABI", ofType: "txt") {
@@ -245,7 +243,7 @@ class MyDragonViewController: UIViewController {
                 let params = [self.dragon.id as AnyObject]
                 let estimatedGasResult = try contract.method("birthDragon", parameters: params)?.estimateGas(transactionOptions: nil)
                 guard let estimatedGas = estimatedGasResult else { return }
-                options.gasLimit = estimatedGas
+                options.gasLimit = .manual(estimatedGas)
                 let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
                 let pin = try pinItem.readPassword()
                 let result = try contract.method("birthDragon", parameters: params)?.send(password: pin)
@@ -275,9 +273,8 @@ class MyDragonViewController: UIViewController {
         DispatchQueue.global().async {  [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 options.value = 0
                 var fightPlaceContractABI: String!
@@ -287,7 +284,7 @@ class MyDragonViewController: UIViewController {
                 let contract = web3.contract(fightPlaceContractABI, at: ContractAddress.dragonsFightPlace, abiVersion: 2)!
                 let params = [self.dragon.id as AnyObject]
                 let estimatedGas = try contract.method("addToFightPlace", parameters: params)?.estimateGas(transactionOptions: nil)
-                options.gasLimit = estimatedGas
+                options.gasLimit = .manual(estimatedGas!)
                 let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
                 let pin = try pinItem.readPassword()
                 let result = try contract.method("addToFightPlace", parameters: params)?.send(password:  pin)

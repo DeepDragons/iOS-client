@@ -4,7 +4,7 @@
 //
 //  Created by Wei Wang on 16/1/6.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -179,6 +179,23 @@ extension KingfisherWrapper where Base: Image {
     public func gifRepresentation() -> Data? {
         return animatedImageData
     }
+
+    /// Returns a data representation for `base` image, with the `format` as the format indicator.
+    ///
+    /// - Parameter format: The format in which the output data should be. If `unknown`, the `base` image will be
+    ///                     converted in the PNG representation.
+    /// - Returns: The output data representing.
+    public func data(format: ImageFormat) -> Data? {
+        let data: Data?
+        switch format {
+        case .PNG: data = pngRepresentation()
+        case .JPEG: data = jpegRepresentation(compressionQuality: 1.0)
+        case .GIF: data = gifRepresentation()
+        case .unknown: data = normalized.kf.pngRepresentation()
+        }
+
+        return data
+    }
 }
 
 // MARK: - Creating Images
@@ -205,7 +222,7 @@ extension KingfisherWrapper where Base: Image {
         guard let animatedImage = GIFAnimatedImage(from: imageSource, for: info, options: options) else {
             return nil
         }
-        let image: Image?
+        var image: Image?
         if options.onlyFirstFrame {
             image = animatedImage.images.first
         } else {
@@ -218,7 +235,7 @@ extension KingfisherWrapper where Base: Image {
         return image
         #else
         
-        let image: Image?
+        var image: Image?
         if options.preloadAll || options.onlyFirstFrame {
             // Use `images` image if you want to preload all animated data
             guard let animatedImage = GIFAnimatedImage(from: imageSource, for: info, options: options) else {

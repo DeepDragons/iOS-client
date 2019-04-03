@@ -93,15 +93,12 @@ class SendDragonViewController: UIViewController {
                 if let path = Bundle.main.path(forResource: "DragonETHContractABI", ofType: "txt") {
                     abi = try String(contentsOfFile: path)
                 }
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = fromAddress
                 let contract = web3.contract(abi, at: contractAddress, abiVersion: 2)!
                 let params = [fromAddress!.address as AnyObject, toAddress.address as AnyObject, self.dragon.id] as [AnyObject]
-                let estimatedGasResult = try contract.method("transferFrom", parameters: params)?.estimateGas(transactionOptions: nil)
-                guard let estimatedGas = estimatedGasResult else {return}
-                options.gasLimit = estimatedGas
+                options.gasLimit = .automatic
                 let intermediateSend = contract.method("transferFrom", parameters: params)!
                 let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
                 let pin = try pinItem.readPassword()

@@ -63,16 +63,9 @@ class BuyDragonViewController: UIViewController {
             guard let self = self, let web3 = self.web3 else {
                 return
             }
-            var gasPriceResult: BigUInt?
-            do {
-                gasPriceResult = try web3.eth.getGasPrice()
-            } catch {
-                print(error.localizedDescription)
-            }
-            guard let gasPrice = gasPriceResult else {return}
             let marketplaceAddress = ContractAddress.fixMarketPlace
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = WalletManager.shared().currentWallet
             let contract = web3.contract((self.marketPlaceABI)!, at: marketplaceAddress, abiVersion: 2)!
             do {
@@ -97,22 +90,16 @@ class BuyDragonViewController: UIViewController {
             guard let price = self.dragonPrice else { return }
             guard let wallet = WalletManager.shared().currentWallet else { return }
             let marketplaceAddress = ContractAddress.fixMarketPlace
-            var gasPriceResult: BigUInt?
-            do {
-                gasPriceResult = try web3.eth.getGasPrice()
-            } catch {
-                print(error.localizedDescription)
-            }
-            guard let gasPrice = gasPriceResult else {return}
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = wallet
             options.value = BigUInt(Double(price) * 1.05)
             let contract = web3.contract((self.marketPlaceABI)!, at: marketplaceAddress, abiVersion: 2)!
             let params = [self.dragon.id] as [AnyObject]
             do {
-                let estimatedGas = try contract.method("buyDragon", parameters: params)?.estimateGas(transactionOptions: nil)
-                options.gasLimit = estimatedGas
+                let estimatedG = try contract.method("buyDragon", parameters: params)?.estimateGas(transactionOptions: nil)
+                guard let estimatedGas = estimatedG else { preconditionFailure("estimatedGas is nil") }
+                options.gasLimit = .manual(estimatedGas)
             } catch {
                 print(error.localizedDescription)
             }

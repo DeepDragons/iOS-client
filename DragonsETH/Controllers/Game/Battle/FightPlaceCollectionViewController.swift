@@ -94,9 +94,8 @@ class FightPlaceCollectionViewController: UICollectionViewController {
             
             do {
                 let marketplaceAddress = ContractAddress.dragonsFightPlace
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var abi : String!
                 var fixMarketPlaceContractABI: String!

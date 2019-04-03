@@ -4,7 +4,7 @@
 //
 //  Created by onevcat on 2018/11/13.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -80,7 +80,7 @@ public struct LocalFileImageDataProvider: ImageDataProvider {
     public var cacheKey: String
 
     public func data(handler: (Result<Data, Error>) -> Void) {
-        handler( Result { try Data(contentsOf: fileURL) } )
+        handler(Result(catching: { try Data(contentsOf: fileURL) }))
     }
 }
 

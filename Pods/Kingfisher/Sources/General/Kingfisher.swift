@@ -4,7 +4,7 @@
 //
 //  Created by Wei Wang on 16/9/14.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -56,12 +56,23 @@ public struct KingfisherWrapper<Base> {
     }
 }
 
-/// Represents a type which is compatible with Kingfisher. You can use `kf` property to get a
+/// Represents an object type that is compatible with Kingfisher. You can use `kf` property to get a
 /// value in the namespace of Kingfisher.
-public protocol KingfisherCompatible { }
+public protocol KingfisherCompatible: AnyObject { }
 
-public extension KingfisherCompatible {
-    
+/// Represents a value type that is compatible with Kingfisher. You can use `kf` property to get a
+/// value in the namespace of Kingfisher.
+public protocol KingfisherCompatibleValue {}
+
+extension KingfisherCompatible {
+    /// Gets a namespace holder for Kingfisher compatible types.
+    public var kf: KingfisherWrapper<Self> {
+        get { return KingfisherWrapper(self) }
+        set { }
+    }
+}
+
+extension KingfisherCompatibleValue {
     /// Gets a namespace holder for Kingfisher compatible types.
     public var kf: KingfisherWrapper<Self> {
         get { return KingfisherWrapper(self) }

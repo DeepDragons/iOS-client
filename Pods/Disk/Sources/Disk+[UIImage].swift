@@ -48,9 +48,9 @@ public extension Disk {
                     jpegData = data
                 }
                 #else
-                if let data = image.pngData() {
+                if let data = UIImagePNGRepresentation(image) {
                     pngData = data
-                } else if let data = image.jpegData(compressionQuality: 1) {
+                } else if let data = UIImageJPEGRepresentation(image, 1) {
                     jpegData = data
                 }
                 #endif
@@ -108,9 +108,9 @@ public extension Disk {
                     jpegData = data
                 }
                 #else
-                if let data = value.pngData() {
+                if let data = UIImagePNGRepresentation(value) {
                     pngData = data
-                } else if let data = value.jpegData(compressionQuality: 1) {
+                } else if let data = UIImageJPEGRepresentation(value, 1) {
                     jpegData = data
                 }
                 #endif

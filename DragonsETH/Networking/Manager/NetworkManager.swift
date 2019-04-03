@@ -49,7 +49,7 @@ struct NetworkManager {
                         return
                     }
                     do {
-                        let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+//                        let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
                         let apiResponse = try JSONDecoder().decode(TransactionsApiResponse.self, from: responseData)
                         completion(apiResponse.transactions,nil)
                     } catch {

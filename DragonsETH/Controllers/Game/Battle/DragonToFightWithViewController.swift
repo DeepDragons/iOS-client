@@ -107,9 +107,8 @@ class DragonToFightWithViewController: UIViewController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var dragonETHContractABI: String!
                 if let path = Bundle.main.path(forResource: "DragonETHContractABI", ofType: "txt") {
@@ -138,9 +137,8 @@ class DragonToFightWithViewController: UIViewController {
             guard let self = self, let web3 = self.web3 else { return }
             do {
                 let marketplaceAddress = ContractAddress.dragonsFightPlace
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var abi : String!
                 if let path = Bundle.main.path(forResource: "DragonsFightPlaceABI", ofType: "txt") {
@@ -162,9 +160,8 @@ class DragonToFightWithViewController: UIViewController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var dragonETHContractABI: String!
                 var fixMarketPlaceContractABI: String!
@@ -246,9 +243,8 @@ class DragonToFightWithViewController: UIViewController {
             guard let self = self, let web3 = self.web3 else { return }
             do {
                 let marketplaceAddress = ContractAddress.dragonsFightPlace
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 options.value = price
                 var abi : String!
@@ -259,7 +255,7 @@ class DragonToFightWithViewController: UIViewController {
                 let params = [yourDragon as AnyObject, self.opponent.id as AnyObject]
                 let estimatedGasResult = try contract.method("fightWithDragon", parameters: params)?.estimateGas(transactionOptions: nil)
                 guard let estimatedGas = estimatedGasResult else { return }
-                options.gasLimit = estimatedGas
+                options.gasLimit = .manual(estimatedGas)
                 let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
                 let pin = try pinItem.readPassword()
                 let result = try contract.method("fightWithDragon", parameters: params)?.send(password: pin)

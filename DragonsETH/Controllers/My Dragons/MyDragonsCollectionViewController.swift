@@ -10,10 +10,9 @@ import UIKit
 import MBProgressHUD
 import Disk
 
-private let reuseIdentifier = "DragonCell"
-
 class MyDragonsCollectionViewController: UICollectionViewController {
 
+    private let reuseIdentifier = "DragonCell"
     var myDragons: [Dragon] {
         do {
             let dragons = try Disk.retrieve("dragons.json", from: .caches, as: [Dragon].self)
@@ -45,6 +44,7 @@ class MyDragonsCollectionViewController: UICollectionViewController {
                         self.collectionView?.reloadData()
                         self.collectionView?.refreshControl?.endRefreshing()
                         MBProgressHUD.hide(for: self.view, animated: true)
+
                     }
                 } else {
                     // present alert

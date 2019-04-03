@@ -65,9 +65,8 @@ class SendToMarketplaceViewController: UIViewController {
             } catch {
                 print(error.localizedDescription)
             }
-            guard let gasPrice = gasPriceResult else {return}
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = wallet
             let contract = web3.contract(abi, at: contractAddress, abiVersion: 2)!
             let block = (60 * 60 * 24) / 15 // ~1 day

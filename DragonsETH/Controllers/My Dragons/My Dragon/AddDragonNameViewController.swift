@@ -50,9 +50,8 @@ class AddDragonNameViewController: UIViewController {
         DispatchQueue.global().async { [weak self] in
             guard let self = self, let web3 = self.web3 else { return }
             do {
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = WalletManager.shared().currentWallet
                 var dragonETHContractABI: String!
                 if let path = Bundle.main.path(forResource: "DragonETHContractABI", ofType: "txt") {
@@ -62,7 +61,7 @@ class AddDragonNameViewController: UIViewController {
                 let params = [self.dragon.id as AnyObject, name as AnyObject]
                 let estimatedGasResult = try contract.method("addDragonName", parameters: params)?.estimateGas(transactionOptions: nil)
                 guard let estimatedGas = estimatedGasResult else { return }
-                options.gasLimit = estimatedGas
+                options.gasLimit = .manual(estimatedGas)
                 let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
                 let pin = try pinItem.readPassword()
                 let result = try contract.method("addDragonName", parameters: params)?.send(password: pin)

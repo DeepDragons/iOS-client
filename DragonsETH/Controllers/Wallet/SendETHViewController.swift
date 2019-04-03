@@ -38,7 +38,7 @@ class SendETHViewController: UIViewController {
     
     let walletManager = WalletManager.shared()
     var web3: web3?
-    var options = Web3Options.defaultOptions()
+    var options = TransactionOptions.defaultOptions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,13 +77,13 @@ class SendETHViewController: UIViewController {
             do {
                 let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
                 let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
-                self.options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
+                self.options.gasPrice = .automatic
                 let estimatedGasResult = try web3.contract(coldWalletABI, at: self.options.to)!.method()?.estimateGas(transactionOptions: nil)
                 guard let estimatedGas = estimatedGasResult else {return}
                 DispatchQueue.main.async {
-                    self.options.gasLimit = estimatedGas
+                    self.options.gasLimit = .automatic
                     self.gasPriceTextField.text = "\(gasPrice.toGwei)"
                     self.gasLimitTextField.text = "\(estimatedGas)"
                 }

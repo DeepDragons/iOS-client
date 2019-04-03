@@ -43,9 +43,8 @@ class CrowdsaleContract {
             return
         }
         do {
-            let gasPrice = try web3.eth.getGasPrice()
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = WalletManager.shared().currentWallet
             let contract = web3.contract(abi, at: ContractAddress.crowdSale, abiVersion: 2)!
             let priceResult = try contract.method("crowdSaleDragonPrice", parameters: [])?.call()
@@ -67,9 +66,8 @@ class CrowdsaleContract {
             return
         }
         do {
-            let gasPrice = try web3.eth.getGasPrice()
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = WalletManager.shared().currentWallet
             let contract = web3.contract(abi, at: ContractAddress.crowdSale, abiVersion: 2)!
             let priceChangerResult = try contract.method("priceChanger", parameters: [])?.call(transactionOptions: nil)
@@ -90,9 +88,8 @@ class CrowdsaleContract {
             return
         }
         do {
-            let gasPrice = try web3.eth.getGasPrice()
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = WalletManager.shared().currentWallet
             let contract = web3.contract(abi, at: ContractAddress.crowdSale, abiVersion: 2)!
             let nunberOfEggsResult = try contract.method("soldDragons", parameters: [])?.call(transactionOptions: nil)
@@ -117,14 +114,13 @@ class CrowdsaleContract {
             return
         }
         do {
-            let gasPrice = try web3.eth.getGasPrice()
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .automatic
             options.from = wallet
             options.value = ether
             options.to = ContractAddress.crowdSale
             let estimatedGas = try web3.contract(abi, at: ContractAddress.crowdSale)!.method()!.estimateGas(transactionOptions: nil)
-            options.gasLimit = estimatedGas
+            options.gasLimit = .manual(estimatedGas)
             let pinItem = KeychainPasswordItem(service: KeychainConfiguration.pinService, account: KeychainConfiguration.account, accessGroup: KeychainConfiguration.accessGroup)
             let pin = try pinItem.readPassword()
             let intermediateSend = web3.contract(abi, at: ContractAddress.crowdSale, abiVersion: 2)!.method()!

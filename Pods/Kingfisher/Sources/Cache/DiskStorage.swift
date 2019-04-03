@@ -4,7 +4,7 @@
 //
 //  Created by Wei Wang on 2018/10/15.
 //
-//  Copyright (c) 2018年 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ public enum DiskStorage {
         public var config: Config
 
         // The final storage URL on disk, with `name` and `cachePathBlock` considered.
-        let directoryURL: URL
+        public let directoryURL: URL
 
         let metaChangingQueue: DispatchQueue
 
@@ -196,11 +196,18 @@ public enum DiskStorage {
         }
 
         func cacheFileName(forKey key: String) -> String {
-            let hashedKey = key.kf.md5
-            if let ext = config.pathExtension {
-                return "\(hashedKey).\(ext)"
+            if config.usesHashedFileName {
+                let hashedKey = key.kf.md5
+                if let ext = config.pathExtension {
+                    return "\(hashedKey).\(ext)"
+                }
+                return hashedKey
+            } else {
+                if let ext = config.pathExtension {
+                    return "\(key).\(ext)"
+                }
+                return key
             }
-            return hashedKey
         }
 
         func allFileURLs(for propertyKeys: [URLResourceKey]) throws -> [URL] {
@@ -309,6 +316,9 @@ extension DiskStorage {
         /// The preferred extension of cache item. It will be appended to the file name as its extension.
         /// Default is `nil`, means that the cache file does not contain a file extension.
         public var pathExtension: String? = nil
+
+        /// Default is `true`, means that the cache file name will be hashed before storing.
+        public var usesHashedFileName = true
 
         let name: String
         let fileManager: FileManager

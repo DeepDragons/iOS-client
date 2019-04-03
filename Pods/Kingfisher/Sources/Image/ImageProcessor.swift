@@ -4,7 +4,7 @@
 //
 //  Created by Wei Wang on 2016/08/26.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -104,7 +104,7 @@ extension ImageProcessor {
     }
 }
 
-public extension ImageProcessor {
+extension ImageProcessor {
     
     /// Appends an `ImageProcessor` to another. The identifier of the new `ImageProcessor`
     /// will be "\(self.identifier)|>\(another.identifier)".
@@ -761,11 +761,6 @@ public struct CroppingImageProcessor: ImageProcessor {
 /// does not render the images to resize. Instead, it downsample the input data directly to an
 /// image. It is a more efficient than `ResizingImageProcessor`.
 ///
-/// - Note:
-/// Downsampling only happens when this processor used as the first processor in a processing
-/// pipeline, when the input `ImageProcessItem` is an `.data` value. If appending to any other
-/// processors, it falls back to use the normal rendering resizing behavior.
-///
 /// Only CG-based images are supported. Animated images (like GIF) is not supported.
 public struct DownsamplingImageProcessor: ImageProcessor {
     
@@ -797,8 +792,10 @@ public struct DownsamplingImageProcessor: ImageProcessor {
     public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> Image? {
         switch item {
         case .image(let image):
-            return image.kf.scaled(to: options.scaleFactor)
-                        .kf.resize(to: size, for: .none)
+            guard let data = image.kf.data(format: .unknown) else {
+                return nil
+            }
+            return KingfisherWrapper.downsampledImage(data: data, to: size, scale: options.scaleFactor)
         case .data(let data):
             return KingfisherWrapper.downsampledImage(data: data, to: size, scale: options.scaleFactor)
         }

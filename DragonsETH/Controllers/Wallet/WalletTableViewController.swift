@@ -81,9 +81,8 @@ class WalletTableViewController: UITableViewController {
                 }
                 // get Mutagen balance
                 let contract = web3.contract(Web3.Utils.erc20ABI, at: ContractAddress.mutagen, abiVersion: 2)!
-                let gasPrice = try web3.eth.getGasPrice()
-                var options = Web3Options.defaultOptions()
-                options.gasPrice = gasPrice
+                var options = TransactionOptions.defaultOptions
+                options.gasPrice = .automatic
                 options.from = localWallet
                 
                 let muataenBalanceResult = try contract.method("balanceOf", parameters: [localWallet] as [AnyObject])?.call(transactionOptions: nil)

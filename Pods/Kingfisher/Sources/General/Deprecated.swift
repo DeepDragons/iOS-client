@@ -4,7 +4,7 @@
 //
 //  Created by onevcat on 2018/09/28.
 //
-//  Copyright (c) 2018 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -392,7 +392,12 @@ extension ImageCache {
             callbackQueue: .dispatch((options ?? .empty).callbackDispatchQueue))
         {
             result in
-            completionHandler?(result.value?.image, result.value?.cacheType ?? .none)
+            do {
+                let value = try result.get()
+                completionHandler?(value.image, value.cacheType)
+            } catch {
+                completionHandler?(nil, .none)
+            }
         }
     }
 
@@ -402,7 +407,7 @@ extension ImageCache {
     @available(*, deprecated, message: "Deprecated. Use `diskStorage.config.expiration` instead")
     open var maxCachePeriodInSecond: TimeInterval {
         get { return diskStorage.config.expiration.timeInterval }
-        set { diskStorage.config.expiration = .seconds(newValue) }
+        set { diskStorage.config.expiration = newValue > 0 ? .seconds(newValue) : .never }
     }
 
     @available(*, deprecated, message: "Use `Result` based callback instead.")
@@ -430,13 +435,14 @@ extension ImageCache {
     @available(*, deprecated, message: "Use the `Result`-based `calculateDiskStorageSize` instead.")
     open func calculateDiskCacheSize(completion handler: @escaping ((_ size: UInt) -> Void)) {
         calculateDiskStorageSize { result in
-            handler(result.value ?? 0)
+            let size: UInt? = try? result.get()
+            handler(size ?? 0)
         }
     }
 }
 
 // MARK: - Deprecated
-public extension Collection where Iterator.Element == KingfisherOptionsInfoItem {
+extension Collection where Iterator.Element == KingfisherOptionsInfoItem {
     /// The queue of callbacks should happen from Kingfisher.
     @available(*, deprecated, message: "Use `callbackQueue` instead.", renamed: "callbackQueue")
     public var callbackDispatchQueue: DispatchQueue {
@@ -454,7 +460,7 @@ message: "Use `.invalidHTTPStatusCode` or `isInvalidResponseStatusCode` of `King
 public let KingfisherErrorStatusCodeKey = "statusCode"
 
 // MARK: - Deprecated
-public extension Collection where Iterator.Element == KingfisherOptionsInfoItem {
+extension Collection where Iterator.Element == KingfisherOptionsInfoItem {
     /// The target `ImageCache` which is used.
     @available(*, deprecated,
     message: "Create a `KingfisherParsedOptionsInfo` from `KingfisherOptionsInfo` and use `targetCache` instead.")
@@ -565,7 +571,7 @@ public extension Collection where Iterator.Element == KingfisherOptionsInfoItem 
     /// The `ImageDownloadRequestModifier` will be used before sending a download request.
     @available(*, deprecated,
     message: "Create a `KingfisherParsedOptionsInfo` from `KingfisherOptionsInfo` and use `requestModifier` instead.")
-    public var modifier: ImageDownloadRequestModifier {
+    public var modifier: ImageDownloadRequestModifier? {
         return KingfisherParsedOptionsInfo(Array(self)).requestModifier
     }
 
@@ -579,7 +585,7 @@ public extension Collection where Iterator.Element == KingfisherOptionsInfoItem 
     /// `ImageModifier` for modifying right before the image is displayed.
     @available(*, deprecated,
     message: "Create a `KingfisherParsedOptionsInfo` from `KingfisherOptionsInfo` and use `imageModifier` instead.")
-    public var imageModifier: ImageModifier {
+    public var imageModifier: ImageModifier? {
         return KingfisherParsedOptionsInfo(Array(self)).imageModifier
     }
 
@@ -632,4 +638,17 @@ public extension Collection where Iterator.Element == KingfisherOptionsInfoItem 
     public var loadDiskFileSynchronously: Bool {
         return KingfisherParsedOptionsInfo(Array(self)).loadDiskFileSynchronously
     }
+}
+
+/// The default modifier.
+/// It does nothing and returns the image as is.
+@available(*, deprecated, message: "Use `nil` in KingfisherOptionsInfo to indicate no modifier.")
+public struct DefaultImageModifier: ImageModifier {
+
+    /// A default `DefaultImageModifier` which can be used everywhere.
+    public static let `default` = DefaultImageModifier()
+    private init() {}
+
+    /// Modifies an input `Image`. See `ImageModifier` protocol for more.
+    public func modify(_ image: Image) -> Image { return image }
 }
